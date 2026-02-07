@@ -24,7 +24,7 @@ function App() {
       />
 
       <Route
-        path="/folders/:id"
+        path="/folders/:folderId"
         element={
           <ProtectedRoute>
             <Folder />

@@ -1,84 +1,116 @@
-import {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {useParams} from 'react-router-dom';
-
-const API = 'http://localhost:3001';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 export default function Folder() {
-  const {id} = useParams();
+  const { folderId } = useParams();
   const token = localStorage.getItem('token');
 
   const [words, setWords] = useState([]);
-  const [nl, setNl] = useState('');
-  const [ru, setRu] = useState('');
-  const navigate = useNavigate();
+  const [newWord, setNewWord] = useState('');
+  const [translation, setTranslation] = useState('');
 
-  // загрузка слов
+  // Получаем слова папки при монтировании
   useEffect(() => {
-    fetch(`${API}/words/${id}`, {
-      headers: {Authorization: `Bearer ${token}`},
+    if (!folderId) return;
+
+    fetch(`http://localhost:3001/words/${folderId}`, {
+      headers: { Authorization: 'Bearer ' + token },
     })
       .then((res) => res.json())
-      .then(setWords);
-  }, [id]);
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setWords(data);
+        } else {
+          console.warn('Expected array, got:', data);
+          setWords([]);
+        }
+      })
+      .catch((err) => console.error(err));
+  }, [folderId, token]);
 
-  // добавить слово
+  // Добавление слова
   const addWord = async () => {
-    if (!nl.trim() || !ru.trim()) return;
+    if (!newWord || !translation) {
+      alert('Введите слово и перевод');
+      return;
+    }
 
-    const res = await fetch(`${API}/words`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        folderId: id,
-        nl,
-        ru,
-      }),
-    });
+    try {
+      const res = await fetch('http://localhost:3001/words', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
+        },
+        body: JSON.stringify({
+          folderId,
+          nl: newWord,
+          ru: translation,
+        }),
+      });
 
-    const word = await res.json();
-    setWords([...words, word]);
-    setNl('');
-    setRu('');
+      if (!res.ok) throw new Error('Error adding word');
+
+      const word = await res.json();
+      setWords((prev) => [...prev, word]);
+
+      setNewWord('');
+      setTranslation('');
+    } catch (err) {
+      console.error(err);
+      alert('Ошибка при добавлении слова');
+    }
   };
 
-  // удалить слово
-  const deleteWord = async (wordId) => {
-    await fetch(`${API}/words/${wordId}`, {
-      method: 'DELETE',
-      headers: {Authorization: `Bearer ${token}`},
-    });
+  // Удаление слова
+  const deleteWord = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:3001/words/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: 'Bearer ' + token },
+      });
 
-    setWords(words.filter((w) => w._id !== wordId));
+      if (!res.ok) throw new Error('Error deleting word');
+
+      setWords((prev) => prev.filter((w) => w._id !== id));
+    } catch (err) {
+      console.error(err);
+      alert('Ошибка при удалении слова');
+    }
   };
 
   return (
-    <div>
-      <button onClick={() => navigate('/')}>Back to Dashboard</button>
-      <h2>Words</h2>
+    <div style={{ padding: '1rem', maxWidth: '400px' }}>
+      <h2>Folder</h2>
 
-      <input
-        placeholder="Dutch word"
-        value={nl}
-        onChange={(e) => setNl(e.target.value)}
-      />
+      <div style={{ marginBottom: '1rem' }}>
+        <input
+          type="text"
+          placeholder="Word in Dutch"
+          value={newWord}
+          onChange={(e) => setNewWord(e.target.value)}
+        />
+      </div>
 
-      <input
-        placeholder="Translation"
-        value={ru}
-        onChange={(e) => setRu(e.target.value)}
-      />
+      <div style={{ marginBottom: '1rem' }}>
+        <input
+          type="text"
+          placeholder="Translation in Russian"
+          value={translation}
+          onChange={(e) => setTranslation(e.target.value)}
+        />
+      </div>
 
-      <button onClick={addWord}>Add word</button>
+      <button onClick={addWord}>Add Word</button>
 
+      <h3>Words in folder:</h3>
       <ul>
         {words.map((w) => (
-          <li key={w._id}>
-            <strong>{w.nl}</strong> — {w.ru}
-            <button onClick={() => deleteWord(w._id)}>❌</button>
+          <li key={w._id || w.nl + w.ru}>
+            {w.nl} → {w.ru}{' '}
+            <button style={{ marginLeft: '0.5rem' }} onClick={() => deleteWord(w._id)}>
+              Delete
+            </button>
           </li>
         ))}
       </ul>
