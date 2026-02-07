@@ -1,13 +1,16 @@
 import {useContext, useState} from 'react';
 import {AuthContext} from '../context/AuthContext';
-import {useNavigate} from 'react-router-dom';
 import {validateEmailAndPassword} from '../utils/validation';
 import {Link} from 'react-router-dom';
+import BackButton from '../components/BackButton';
+import {useError} from '../context/ErrorContext';
+import {useNavigate} from 'react-router-dom';
 
 export default function Login() {
   const {login} = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const {showError} = useError();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -15,7 +18,7 @@ export default function Login() {
 
     const validation = validateEmailAndPassword(email, password);
     if (!validation.valid) {
-      alert(validation.message);
+      showError(validation.message);
       return;
     }
 
@@ -25,19 +28,23 @@ export default function Login() {
       localStorage.setItem('token', res.token);
       navigate('/app');
     } else {
-      alert(res.message || 'Login failed');
+      showError(res.message || 'Login failed');
     }
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <BackButton />
+      <div className="h1-container">
         <h2>Login</h2>
+      </div>
+      <form onSubmit={handleSubmit}>
         <input
           type="email"
           placeholder="Email"
           autoComplete="email"
           value={email}
+          size={25}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
@@ -45,15 +52,16 @@ export default function Login() {
           placeholder="Password"
           autoComplete="current-password"
           value={password}
+          size={25}
           onChange={(e) => setPassword(e.target.value)}
         />
         <button>Login</button>
       </form>
-      <p>
-        Forgot password? <Link to="/forgot">Reset here</Link>
-      </p>
-
-      <button onClick={() => navigate('/')}>Back Home</button>
+      <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+        <p>
+          Forgot password? <Link to="/forgot">Reset here</Link>
+        </p>
+      </div>
     </>
   );
 }

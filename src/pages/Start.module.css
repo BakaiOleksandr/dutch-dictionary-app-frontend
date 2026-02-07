@@ -3,8 +3,14 @@
   flex-direction: column;
   align-items: center;
 }
+.startContent{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .logoContainer {
-  width: 10rem;
+  max-width: 30rem;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Folder from './pages/Folder';
+import ForgotPassword from './pages/ForgotPassword';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -22,7 +23,6 @@ function App() {
         }
       />
 
-      ✅ {/* ВОТ ЭТОГО НЕ ХВАТАЛО */}
       <Route
         path="/folders/:id"
         element={
@@ -31,6 +31,7 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route path="/forgot" element={<ForgotPassword />} />
     </Routes>
   );
 }

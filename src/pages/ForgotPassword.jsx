@@ -1,26 +1,23 @@
 import {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import BackButton from '../components/BackButton';
+import {useError} from '../context/ErrorContext';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
-  const navigate = useNavigate();
+  const {showError} = useError();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
 
     if (!email || !newPassword) {
-      setError('Fill in all fields');
+      showError('Fill in all fields');
       return;
     }
 
     if (newPassword.length < 6) {
-      setError('Password must be at least 6 characters');
+      showError('Password must be at least 6 characters');
       return;
     }
 
@@ -34,18 +31,22 @@ export default function ForgotPassword() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Error');
+        setEmail('');
+        setNewPassword('');
+        showError(data.message || 'Error');
+
         return;
       }
 
       setSuccess(data.message);
     } catch (err) {
-      setError('Server error');
+      showError('Server error');
     }
   };
 
   return (
     <div>
+      <BackButton />
       <h2>Reset Password</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -66,9 +67,7 @@ export default function ForgotPassword() {
         />
         <button type="submit">Reset Password</button>
       </form>
-      {error && <p style={{color: 'red'}}>{error}</p>}
       {success && <p style={{color: 'green'}}>{success}</p>}
-      <button onClick={() => navigate('/')}>Back Home</button>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {useParams} from 'react-router-dom';
 
 const API = 'http://localhost:3001';
@@ -10,6 +11,7 @@ export default function Folder() {
   const [words, setWords] = useState([]);
   const [nl, setNl] = useState('');
   const [ru, setRu] = useState('');
+  const navigate = useNavigate();
 
   // загрузка слов
   useEffect(() => {
@@ -55,6 +57,7 @@ export default function Folder() {
 
   return (
     <div>
+      <button onClick={() => navigate('/')}>Back to Dashboard</button>
       <h2>Words</h2>
 
       <input
