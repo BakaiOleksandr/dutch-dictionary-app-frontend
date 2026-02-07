@@ -1,75 +1,54 @@
 import {createContext, useEffect, useState} from 'react';
-import {getMe, login as apiLogin, register as apiRegister} from '../api/auth';
+import {login as loginRequest, getMe} from '../api/auth';
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext();
 
-export const AuthProvider = ({children}) => {
+export function AuthProvider({children}) {
+  const [isAuth, setIsAuth] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const token = localStorage.getItem('token');
 
-  // 🔁 Проверка токена при старте
-  useEffect(() => {
-    const checkAuth = async () => {
-      if (token) {
-        try {
-          const me = await getMe(token);
-          if (!me.message) {
-            setUser(me);
-          } else {
-            logout();
-          }
-        } catch {
-          logout();
-        }
-      }
-      setLoading(false);
-    };
-
-    checkAuth();
-  }, []);
-
-  // 🔐 Login
   const login = async (email, password) => {
-    const data = await apiLogin(email, password);
+    const data = await loginRequest(email, password);
     if (data.token) {
       localStorage.setItem('token', data.token);
-      const me = await getMe(data.token);
-      setUser(me);
+      await loadUser(data.token);
+      setIsAuth(true);
     }
     return data;
   };
 
-  // 📝 Register
-  const register = async (email, password) => {
-    const data = await apiRegister(email, password);
-    if (data.token) {
-      localStorage.setItem('token', data.token);
-      const me = await getMe(data.token);
-      setUser(me);
+  const loadUser = async (token) => {
+    try {
+      const userData = await getMe(token);
+      setUser(userData);
+    } catch {
+      logout();
     }
-    return data;
   };
 
-  // 🚪 Logout
   const logout = () => {
     localStorage.removeItem('token');
+    setIsAuth(false);
     setUser(null);
   };
 
+  useEffect(() => {
+    if (token) {
+      loadUser(token).finally(() => {
+        setIsAuth(true);
+        setLoading(false);
+      });
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAuth: !!user,
-        loading,
-        login,
-        register,
-        logout,
-      }}
-    >
+    <AuthContext.Provider value={{isAuth, user, login, logout, loading}}>
       {children}
     </AuthContext.Provider>
   );
-};
+}
