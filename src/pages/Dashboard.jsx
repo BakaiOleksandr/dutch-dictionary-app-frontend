@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {AuthContext} from '../context/AuthContext';
 
-const API = 'http://localhost:3001';
+const API = import.meta.env.VITE_API;
 
 export default function Dashboard() {
   const [folders, setFolders] = useState([]);
@@ -59,7 +59,9 @@ export default function Dashboard() {
             </p>
           )}
         </div>
-        <button onClick={logout}>Logout</button>
+        <button className="log-out-btn" onClick={logout}>
+          Logout
+        </button>
       </header>
       <h2>Your folders</h2>
 

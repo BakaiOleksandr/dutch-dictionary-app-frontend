@@ -10,7 +10,6 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
 
     const validation = validateEmailAndPassword(email, password);
     if (!validation.valid) {

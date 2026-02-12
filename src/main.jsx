@@ -5,13 +5,16 @@ import './index.css';
 import {AuthProvider} from './context/AuthContext';
 import {BrowserRouter} from 'react-router-dom';
 import {ErrorProvider} from './context/ErrorContext';
+import {LoadingProvider} from './context/LoadingContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
         <ErrorProvider>
-          <App />
+          <LoadingProvider>
+            <App />
+          </LoadingProvider>
         </ErrorProvider>
       </AuthProvider>
     </BrowserRouter>

@@ -1,20 +1,45 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import {useState, useEffect} from 'react';
+import {useParams} from 'react-router-dom';
+import BackButton from '../components/BackButton';
+import {useContext} from 'react';
+import {LoadingContext} from '../context/LoadingContext';
+import {useError} from '../context/ErrorContext';
+
+const API = import.meta.env.VITE_API;
 
 export default function Folder() {
-  const { folderId } = useParams();
+  const {folderId} = useParams();
   const token = localStorage.getItem('token');
 
   const [words, setWords] = useState([]);
   const [newWord, setNewWord] = useState('');
   const [translation, setTranslation] = useState('');
+  const [folder, setFolder] = useState(null);
+
+  const {setLoading} = useContext(LoadingContext);
+  const {showError} = useError();
+
+  // find folder
+  useEffect(() => {
+    if (!folderId) return;
+
+    setLoading(true);
+
+    fetch(`${API}/folders/${folderId}`, {
+      headers: {Authorization: `Bearer ${token}`},
+    })
+      .then((res) => res.json())
+      .then((data) => setFolder(data))
+      .catch((err) => showError(err))
+      .finally(() => setLoading(false));
+  }, [folderId, token]);
 
   // Получаем слова папки при монтировании
   useEffect(() => {
     if (!folderId) return;
 
-    fetch(`http://localhost:3001/words/${folderId}`, {
-      headers: { Authorization: 'Bearer ' + token },
+    fetch(`${API}/words/${folderId}`, {
+      headers: {Authorization: 'Bearer ' + token},
     })
       .then((res) => res.json())
       .then((data) => {
@@ -25,7 +50,7 @@ export default function Folder() {
           setWords([]);
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => showError(err));
   }, [folderId, token]);
 
   // Добавление слова
@@ -36,7 +61,7 @@ export default function Folder() {
     }
 
     try {
-      const res = await fetch('http://localhost:3001/words', {
+      const res = await fetch(`${API}/words`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -57,17 +82,16 @@ export default function Folder() {
       setNewWord('');
       setTranslation('');
     } catch (err) {
-      console.error(err);
-      alert('Ошибка при добавлении слова');
+      showError(err);
     }
   };
 
   // Удаление слова
   const deleteWord = async (id) => {
     try {
-      const res = await fetch(`http://localhost:3001/words/${id}`, {
+      const res = await fetch(`${API}/words/${id}`, {
         method: 'DELETE',
-        headers: { Authorization: 'Bearer ' + token },
+        headers: {Authorization: 'Bearer ' + token},
       });
 
       if (!res.ok) throw new Error('Error deleting word');
@@ -80,10 +104,13 @@ export default function Folder() {
   };
 
   return (
-    <div style={{ padding: '1rem', maxWidth: '400px' }}>
-      <h2>Folder</h2>
+    <div style={{padding: '1rem', maxWidth: '400px'}}>
+      <BackButton />
+      <h2>
+        Folder: <span>{folder?.name}</span>
+      </h2>
 
-      <div style={{ marginBottom: '1rem' }}>
+      <div style={{marginBottom: '1rem'}}>
         <input
           type="text"
           placeholder="Word in Dutch"
@@ -92,7 +119,7 @@ export default function Folder() {
         />
       </div>
 
-      <div style={{ marginBottom: '1rem' }}>
+      <div style={{marginBottom: '1rem'}}>
         <input
           type="text"
           placeholder="Translation in Russian"
@@ -108,7 +135,10 @@ export default function Folder() {
         {words.map((w) => (
           <li key={w._id || w.nl + w.ru}>
             {w.nl} → {w.ru}{' '}
-            <button style={{ marginLeft: '0.5rem' }} onClick={() => deleteWord(w._id)}>
+            <button
+              style={{marginLeft: '0.5rem'}}
+              onClick={() => deleteWord(w._id)}
+            >
               Delete
             </button>
           </li>
