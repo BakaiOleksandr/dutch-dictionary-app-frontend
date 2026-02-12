@@ -79,3 +79,7 @@ form {
   background-color: rgb(246, 182, 191);
 
 }
+ul{
+  list-style: none;
+  padding: 0;
+}

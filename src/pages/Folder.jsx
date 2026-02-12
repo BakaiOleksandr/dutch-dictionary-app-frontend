@@ -4,6 +4,8 @@ import BackButton from '../components/BackButton';
 import {useContext} from 'react';
 import {LoadingContext} from '../context/LoadingContext';
 import {useError} from '../context/ErrorContext';
+import {FcOpenedFolder} from 'react-icons/fc';
+import styles from './Folder.module.css';
 
 const API = import.meta.env.VITE_API;
 
@@ -56,7 +58,7 @@ export default function Folder() {
   // Добавление слова
   const addWord = async () => {
     if (!newWord || !translation) {
-      alert('Введите слово и перевод');
+      showError('Enter a word');
       return;
     }
 
@@ -98,17 +100,20 @@ export default function Folder() {
 
       setWords((prev) => prev.filter((w) => w._id !== id));
     } catch (err) {
-      console.error(err);
-      alert('Ошибка при удалении слова');
+      showError(err);
     }
   };
 
   return (
-    <div style={{padding: '1rem', maxWidth: '400px'}}>
+    <div className="foler-container">
       <BackButton />
-      <h2>
-        Folder: <span>{folder?.name}</span>
-      </h2>
+      <div className="folder-icon-and-name">
+        <FcOpenedFolder size={80} />
+
+        <h2>
+          Folder: <span>{folder?.name}</span>
+        </h2>
+      </div>
 
       <div style={{marginBottom: '1rem'}}>
         <input
@@ -130,13 +135,16 @@ export default function Folder() {
 
       <button onClick={addWord}>Add Word</button>
 
-      <h3>Words in folder:</h3>
-      <ul>
+      {words.length > 0 ? <h3>Words in folder:</h3> : ''}
+      <ul className={styles.wordsListContainer}>
         {words.map((w) => (
-          <li key={w._id || w.nl + w.ru}>
-            {w.nl} → {w.ru}{' '}
+          <li key={w._id || w.nl + w.ru} className={styles.wordItem}>
+            <span className={styles.wordText}>
+              <strong>{w.nl}</strong> →{' '}
+              <i style={{fontWeight: '300'}}>{w.ru}</i>
+            </span>
             <button
-              style={{marginLeft: '0.5rem'}}
+              className={styles.folderDeleteWordBtn}
               onClick={() => deleteWord(w._id)}
             >
               Delete
