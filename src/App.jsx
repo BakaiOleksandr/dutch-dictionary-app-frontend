@@ -9,6 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import {useContext} from 'react';
 import {LoadingContext} from './context/LoadingContext';
 import Spinner from './components/Spinner';
+import PlayGame from './pages/PlayGame';
 
 function App() {
   const {loading} = useContext(LoadingContext);
@@ -38,6 +39,14 @@ function App() {
           }
         />
         <Route path="/forgot" element={<ForgotPassword />} />
+        <Route
+          path="/play/:folderId"
+          element={
+            <ProtectedRoute>
+              <PlayGame />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

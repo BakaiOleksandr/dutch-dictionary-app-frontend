@@ -1,6 +1,8 @@
 import {useContext, useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {AuthContext} from '../context/AuthContext';
+import Spinner from '../components/Spinner';
+import {LoadingContext} from '../context/LoadingContext';
 
 const API = import.meta.env.VITE_API;
 
@@ -11,13 +13,27 @@ export default function Dashboard() {
 
   const token = localStorage.getItem('token');
 
+  const {loading, setLoading} = useContext(LoadingContext);
   // загрузка папок
   useEffect(() => {
-    fetch(`${API}/folders`, {
-      headers: {Authorization: `Bearer ${token}`},
-    })
-      .then((res) => res.json())
-      .then(setFolders);
+    const fetchFolders = async () => {
+      try {
+        setLoading(true);
+
+        const res = await fetch(`${API}/folders`, {
+          headers: {Authorization: `Bearer ${token}`},
+        });
+
+        const data = await res.json();
+        setFolders(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFolders();
   }, []);
 
   // создать папку
@@ -47,6 +63,7 @@ export default function Dashboard() {
 
     setFolders(folders.filter((f) => f._id !== id));
   };
+  if (loading) return <Spinner />;
 
   return (
     <div>
@@ -76,6 +93,10 @@ export default function Dashboard() {
         {folders.map((folder) => (
           <li key={folder._id}>
             <Link to={`/folders/${folder._id}`}>{folder.name}</Link>
+            <Link to={`/play/${folder._id}`}>
+              <button style={{marginLeft: '1rem'}}>Play Game 🎮</button>
+            </Link>
+
             <button onClick={() => deleteFolder(folder._id)}>❌</button>
           </li>
         ))}

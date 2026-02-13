@@ -1,17 +1,17 @@
 .folerContainer {
   display: flex;
   flex-direction: column;
-  padding: 1rem;
-  max-width: 500px;
-  margin: 0 auto;
   font-family: sans-serif;
+}
+.folerContainer h3{
+  text-align: center;
 }
 
 .folderIconAndName {
   display: flex;
   gap: 1rem;
   align-items: center;
-  margin-bottom: 1rem;
+  justify-content: center;
 }
 
 .wordsListContainer {
@@ -21,6 +21,11 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+.addWord{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 

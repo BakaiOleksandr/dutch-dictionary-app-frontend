@@ -1,11 +1,12 @@
 import {useState, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
+import {useParams, Link} from 'react-router-dom';
 import BackButton from '../components/BackButton';
 import {useContext} from 'react';
 import {LoadingContext} from '../context/LoadingContext';
 import {useError} from '../context/ErrorContext';
 import {FcOpenedFolder} from 'react-icons/fc';
 import styles from './Folder.module.css';
+import Spinner from '../components/Spinner';
 
 const API = import.meta.env.VITE_API;
 
@@ -18,8 +19,10 @@ export default function Folder() {
   const [translation, setTranslation] = useState('');
   const [folder, setFolder] = useState(null);
 
-  const {setLoading} = useContext(LoadingContext);
+  const {loading, setLoading} = useContext(LoadingContext);
   const {showError} = useError();
+
+
 
   // find folder
   useEffect(() => {
@@ -54,6 +57,9 @@ export default function Folder() {
       })
       .catch((err) => showError(err));
   }, [folderId, token]);
+
+  const capitalize = (str) =>
+    str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase();
 
   // Добавление слова
   const addWord = async () => {
@@ -103,39 +109,38 @@ export default function Folder() {
       showError(err);
     }
   };
-
+  if (loading) return <Spinner />;
+  //RETURN RETURN RETURN RETURN
   return (
-    <div className="foler-container">
-      <BackButton />
-      <div className="folder-icon-and-name">
-        <FcOpenedFolder size={80} />
+    <div className={styles.folerContainer}>
+      <div className={styles.folderIconAndName}>
+        <BackButton />
+        <FcOpenedFolder size={50} />
 
         <h2>
-          Folder: <span>{folder?.name}</span>
+          Папка: <span>{folder?.name}</span>
         </h2>
       </div>
 
-      <div style={{marginBottom: '1rem'}}>
+      <div className={styles.addWord}>
+        <h3 style={{fontWeight: '400'}}>Добавьте новое слово</h3>
         <input
           type="text"
           placeholder="Word in Dutch"
           value={newWord}
-          onChange={(e) => setNewWord(e.target.value)}
+          onChange={(e) => setNewWord(capitalize(e.target.value))}
         />
-      </div>
 
-      <div style={{marginBottom: '1rem'}}>
         <input
           type="text"
           placeholder="Translation in Russian"
           value={translation}
-          onChange={(e) => setTranslation(e.target.value)}
+          onChange={(e) => setTranslation(capitalize(e.target.value))}
         />
+        <button onClick={addWord}>Добавить слово</button>
       </div>
 
-      <button onClick={addWord}>Add Word</button>
-
-      {words.length > 0 ? <h3>Words in folder:</h3> : ''}
+      {words.length > 0 ? <h3>Слова в этой папке:</h3> : ''}
       <ul className={styles.wordsListContainer}>
         {words.map((w) => (
           <li key={w._id || w.nl + w.ru} className={styles.wordItem}>
@@ -147,11 +152,14 @@ export default function Folder() {
               className={styles.folderDeleteWordBtn}
               onClick={() => deleteWord(w._id)}
             >
-              Delete
+              Удалить
             </button>
           </li>
         ))}
       </ul>
+      <Link to={`/play/${folderId}`}>
+        <button style={{marginLeft: '1rem'}}>Play Game 🎮</button>
+      </Link>
     </div>
   );
 }
