@@ -1,0 +1,75 @@
+.headerDash {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: antiquewhite;
+  padding: 1rem;
+}
+.userNameDash {
+  font-weight: 300;
+  margin: 0;
+  background-color: antiquewhite;
+}
+.logOutBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(246, 182, 191);
+  font-weight: 200;
+  margin: 0;
+}
+.addFolderContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.createFolder{
+  align-self: center;
+}
+.inputAndButton {
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.foldersList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.folderDash {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(231, 231, 231);
+  padding: 0.2rem;
+  min-width: 10rem;
+  width: 50%;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+}
+.folderDashIconName {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.playAndDelete {
+  display: flex;
+  gap: 1rem;
+  align-self: flex-end;
+  align-items: center;
+}
+.folderName {
+  font-size: 1rem;
+}
+.openFolderBTN{
+    display: none;
+}
+@media (max-width: 768px) {
+  .folderDash {
+    width: 100%;
+  }
+  .openFolderBTN{
+    display: flex;
+    margin: 0;
+  }
+}

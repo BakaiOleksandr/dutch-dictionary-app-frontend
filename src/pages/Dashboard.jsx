@@ -2,6 +2,8 @@ import {useContext, useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {AuthContext} from '../context/AuthContext';
 import {LoadingContext} from '../context/LoadingContext';
+import styles from './Dashboard.module.css';
+import {FcFolder} from 'react-icons/fc';
 
 const API = import.meta.env.VITE_API;
 
@@ -65,37 +67,54 @@ export default function Dashboard() {
 
   return (
     <div>
-      <header style={{display: 'flex', justifyContent: 'space-between'}}>
-        <div>
-          <h2>Dashboard</h2>
-          {user && (
-            <p>
-              Logged in as: <strong>{user.email}</strong>
-            </p>
-          )}
-        </div>
-        <button className="log-out-btn" onClick={logout}>
+      <div className={styles.headerDash}>
+        {user && <p className={styles.userNameDash}>{user.email}</p>}
+        <button className={styles.logOutBtn} onClick={logout}>
           Logout
         </button>
-      </header>
-      <h2>Your folders</h2>
+      </div>
+      <div className={styles.addFolderContainer}>
+        <h2>Your folders</h2>
 
-      <input
-        placeholder="Folder name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <button onClick={createFolder}>Create folder</button>
+        <div className={styles.inputAndButton}>
+          <input
+            style={{margin: '0'}}
+            placeholder="Folder name"
+            value={name}
+            maxLength={30}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <button className={styles.createFolder} onClick={createFolder}>
+            Create folder
+          </button>
+        </div>
+      </div>
 
-      <ul>
+      <ul className={styles.foldersList}>
         {folders.map((folder) => (
-          <li key={folder._id}>
-            <Link to={`/folders/${folder._id}`}>{folder.name}</Link>
-            <Link to={`/play/${folder._id}`}>
-              <button style={{marginLeft: '1rem'}}>Play Game 🎮</button>
-            </Link>
+          <li className={styles.folderDash} key={folder._id}>
+            <div className={styles.folderDashIconName}>
+              <FcFolder size={40} />
+              <div className={styles.folderName}>
+                <Link to={`/folders/${folder._id}`}>{folder.name}</Link>
+              </div>
+            </div>
 
-            <button onClick={() => deleteFolder(folder._id)}>❌</button>
+            <div className={styles.playAndDelete}>
+              <Link to={`/folders/${folder._id}`}>
+                <button className={styles.openFolderBTN}>Open</button>
+              </Link>
+              <Link to={`/play/${folder._id}`}>
+                <button style={{margin: 0}}>Game 🎮</button>
+              </Link>
+
+              <button
+                style={{margin: 0}}
+                onClick={() => deleteFolder(folder._id)}
+              >
+                ❌
+              </button>
+            </div>
           </li>
         ))}
       </ul>

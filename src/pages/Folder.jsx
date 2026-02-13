@@ -1,11 +1,12 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useContext, useRef} from 'react';
 import {useParams, Link} from 'react-router-dom';
 import BackButton from '../components/BackButton';
-import {useContext} from 'react';
 import {LoadingContext} from '../context/LoadingContext';
 import {useError} from '../context/ErrorContext';
 import {FcOpenedFolder} from 'react-icons/fc';
 import styles from './Folder.module.css';
+import {FiArrowUp} from 'react-icons/fi';
+import ScrollToTopButton from '../components/ScrollToTopButton';
 
 const API = import.meta.env.VITE_API;
 
@@ -20,6 +21,8 @@ export default function Folder() {
 
   const {loading, setLoading} = useContext(LoadingContext);
   const {showError} = useError();
+
+  const formRef = useRef(null);
 
   // find folder
   useEffect(() => {
@@ -106,7 +109,7 @@ export default function Folder() {
   //RETURN RETURN RETURN RETURN
   return (
     <div className={styles.folerContainer}>
-      <div className={styles.folderIconAndName}>
+      <div ref={formRef} className={styles.folderIconAndName}>
         <BackButton />
         <FcOpenedFolder size={50} />
 
@@ -150,9 +153,10 @@ export default function Folder() {
           </li>
         ))}
       </ul>
-      <Link to={`/play/${folderId}`}>
+      <Link className={styles.playGameInFolder} to={`/play/${folderId}`}>
         <button style={{marginLeft: '1rem'}}>Play Game 🎮</button>
       </Link>
+      <ScrollToTopButton targetRef={formRef} scrollThreshold={300} />
     </div>
   );
 }
