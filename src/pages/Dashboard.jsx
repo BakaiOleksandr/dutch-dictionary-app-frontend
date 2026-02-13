@@ -1,7 +1,6 @@
 import {useContext, useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {AuthContext} from '../context/AuthContext';
-import Spinner from '../components/Spinner';
 import {LoadingContext} from '../context/LoadingContext';
 
 const API = import.meta.env.VITE_API;
@@ -63,7 +62,6 @@ export default function Dashboard() {
 
     setFolders(folders.filter((f) => f._id !== id));
   };
-  if (loading) return <Spinner />;
 
   return (
     <div>

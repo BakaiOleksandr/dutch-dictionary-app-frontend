@@ -60,7 +60,7 @@
   justify-self: end; /* кнопка всегда справа */
   padding: 0.25rem 0.5rem;
   border: none;
-  background-color: #ff4d4f;
+  /* background-color: #ff4d4f; */
   color: white;
   border-radius: 4px;
   cursor: pointer;
@@ -68,6 +68,6 @@
 }
 
 .folderDeleteWordBtn:hover {
-  background-color: #ff7875;
+  background-color: #fcd7d6;
   transform: scale(1.05);
 }

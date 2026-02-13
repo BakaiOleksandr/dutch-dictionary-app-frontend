@@ -6,7 +6,6 @@ import {LoadingContext} from '../context/LoadingContext';
 import {useError} from '../context/ErrorContext';
 import {FcOpenedFolder} from 'react-icons/fc';
 import styles from './Folder.module.css';
-import Spinner from '../components/Spinner';
 
 const API = import.meta.env.VITE_API;
 
@@ -21,8 +20,6 @@ export default function Folder() {
 
   const {loading, setLoading} = useContext(LoadingContext);
   const {showError} = useError();
-
-
 
   // find folder
   useEffect(() => {
@@ -57,9 +54,6 @@ export default function Folder() {
       })
       .catch((err) => showError(err));
   }, [folderId, token]);
-
-  const capitalize = (str) =>
-    str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase();
 
   // Добавление слова
   const addWord = async () => {
@@ -109,7 +103,6 @@ export default function Folder() {
       showError(err);
     }
   };
-  if (loading) return <Spinner />;
   //RETURN RETURN RETURN RETURN
   return (
     <div className={styles.folerContainer}>
@@ -128,14 +121,14 @@ export default function Folder() {
           type="text"
           placeholder="Word in Dutch"
           value={newWord}
-          onChange={(e) => setNewWord(capitalize(e.target.value))}
+          onChange={(e) => setNewWord(e.target.value)}
         />
 
         <input
           type="text"
           placeholder="Translation in Russian"
           value={translation}
-          onChange={(e) => setTranslation(capitalize(e.target.value))}
+          onChange={(e) => setTranslation(e.target.value)}
         />
         <button onClick={addWord}>Добавить слово</button>
       </div>
@@ -152,7 +145,7 @@ export default function Folder() {
               className={styles.folderDeleteWordBtn}
               onClick={() => deleteWord(w._id)}
             >
-              Удалить
+              ❌
             </button>
           </li>
         ))}
