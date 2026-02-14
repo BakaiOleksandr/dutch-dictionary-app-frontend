@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3001';
+const API_URL = import.meta.env.VITE_API;
 
 export const register = async (email, password) => {
   const res = await fetch(`${API_URL}/auth/register`, {
@@ -24,7 +24,7 @@ export const getMe = async (token) => {
   const res = await fetch(`${API_URL}/auth/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
 
