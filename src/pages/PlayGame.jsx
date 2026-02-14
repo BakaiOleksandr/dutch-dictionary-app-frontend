@@ -2,6 +2,7 @@ import {useEffect, useState, useContext} from 'react';
 import {useParams} from 'react-router-dom';
 import BackButton from '../components/BackButton';
 import {LoadingContext} from '../context/LoadingContext';
+import styles from './PlayGame.module.css';
 
 const API = import.meta.env.VITE_API;
 
@@ -105,22 +106,24 @@ export default function PlayGame() {
   return (
     <div>
       <BackButton />
-      <h2>Translate the word:</h2>
+      <div className={styles.playGameContainer}>
+        <h2>Translate the word:</h2>
 
-      <h3>{currentWord.nl}</h3>
+        <h3>{currentWord.nl}</h3>
 
-      <input
-        type="text"
-        placeholder="Type translation..."
-        value={answer}
-        onChange={(e) => setAnswer(e.target.value)}
-      />
+        <input
+          type="text"
+          placeholder="Type translation..."
+          value={answer}
+          onChange={(e) => setAnswer(e.target.value)}
+        />
 
-      <button onClick={handleSubmit}>Submit</button>
+        <button onClick={handleSubmit}>Submit</button>
 
-      <p>
-        Progress: {currentIndex + 1} / {words.length}
-      </p>
+        <p>
+          Progress: {currentIndex + 1} / {words.length}
+        </p>
+      </div>
     </div>
   );
 }

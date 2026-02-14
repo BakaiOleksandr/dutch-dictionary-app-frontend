@@ -110,12 +110,15 @@ export default function Folder() {
   return (
     <div className={styles.folerContainer}>
       <div ref={formRef} className={styles.folderIconAndName}>
-        <BackButton />
-        <FcOpenedFolder size={50} />
-
-        <h2>
-          Папка: <span>{folder?.name}</span>
-        </h2>
+        <div className={styles.folderBackBTN}>
+          <BackButton />
+        </div>
+        <div className={styles.folderNameAndIconContainer}>
+          <FcOpenedFolder size={50} />
+          <h2>
+            Папка: <span>{folder?.name}</span>
+          </h2>
+        </div>
       </div>
 
       <div className={styles.addWord}>

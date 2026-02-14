@@ -10,6 +10,7 @@ import {useContext} from 'react';
 import {LoadingContext} from './context/LoadingContext';
 import Spinner from './components/Spinner';
 import PlayGame from './pages/PlayGame';
+import UsefullLinks from './pages/UsefullLinks';
 
 function App() {
   const {loading} = useContext(LoadingContext);
@@ -47,6 +48,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/usefulllinks"
+          element={
+            <ProtectedRoute>
+              <UsefullLinks />
+            </ProtectedRoute>
+          }
+        ></Route>
       </Routes>
     </>
   );

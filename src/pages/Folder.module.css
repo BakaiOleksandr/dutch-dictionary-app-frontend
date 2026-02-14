@@ -3,17 +3,20 @@
   flex-direction: column;
   font-family: sans-serif;
 }
-.folerContainer h3 {
-  text-align: center;
-}
 
 .folderIconAndName {
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  position: relative; /* важно */
+  width: 100%;
+}
+.folderNameAndIconContainer {
+  display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto; /* центр по горизонтали */
 }
-.addFolderContainer{
+.addFolderContainer {
   display: flex;
   flex-direction: column;
   background-color: #b53d38;
@@ -30,6 +33,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.folderBackBTN {
+  position: absolute;
+  left: 0;
 }
 
 /* li — grid: слово по центру, кнопка справа */

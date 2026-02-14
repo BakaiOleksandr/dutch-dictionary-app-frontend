@@ -4,6 +4,7 @@ import {AuthContext} from '../context/AuthContext';
 import {LoadingContext} from '../context/LoadingContext';
 import styles from './Dashboard.module.css';
 import {FcFolder} from 'react-icons/fc';
+import UsefullLinks from './UsefullLinks';
 
 const API = import.meta.env.VITE_API;
 
@@ -69,6 +70,9 @@ export default function Dashboard() {
     <div>
       <div className={styles.headerDash}>
         {user && <p className={styles.userNameDash}>{user.email}</p>}
+        <Link to={'/usefulllinks'}>
+          <button className={styles.useful}>Полезное </button>
+        </Link>
         <button className={styles.logOutBtn} onClick={logout}>
           Logout
         </button>

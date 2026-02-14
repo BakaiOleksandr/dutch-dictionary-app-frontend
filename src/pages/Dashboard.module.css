@@ -10,6 +10,11 @@
   margin: 0;
   background-color: antiquewhite;
 }
+.useful {
+  background-color: rgb(168, 196, 251);
+  font-weight: 300;
+  margin: 0;
+}
 .logOutBtn {
   display: flex;
   align-items: center;
@@ -18,12 +23,12 @@
   font-weight: 200;
   margin: 0;
 }
-.addFolderContainer{
+.addFolderContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.createFolder{
+.createFolder {
   align-self: center;
 }
 .inputAndButton {
@@ -61,15 +66,19 @@
 .folderName {
   font-size: 1rem;
 }
-.openFolderBTN{
-    display: none;
+.openFolderBTN {
+  display: none;
 }
 @media (max-width: 768px) {
   .folderDash {
     width: 100%;
   }
-  .openFolderBTN{
+  .openFolderBTN {
     display: flex;
     margin: 0;
+  }
+  .headerDash {
+    font-size: smaller;
+    padding: 0.5rem;
   }
 }
