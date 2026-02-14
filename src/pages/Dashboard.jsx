@@ -19,6 +19,7 @@ export default function Dashboard() {
   // загрузка папок
   useEffect(() => {
     const fetchFolders = async () => {
+      if (!token) return;
       try {
         setLoading(true);
 
@@ -36,7 +37,7 @@ export default function Dashboard() {
     };
 
     fetchFolders();
-  }, []);
+  }, [token]);
 
   // создать папку
   const createFolder = async () => {
