@@ -5,7 +5,6 @@ import {LoadingContext} from '../context/LoadingContext';
 import {useError} from '../context/ErrorContext';
 import {FcOpenedFolder} from 'react-icons/fc';
 import styles from './Folder.module.css';
-import {FiArrowUp} from 'react-icons/fi';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 
 const API = import.meta.env.VITE_API;
@@ -118,8 +117,13 @@ export default function Folder() {
             Папка: <span>{folder?.name}</span>
           </h2>
         </div>
+        
       </div>
-
+    <Link style={{alignSelf:'center'}} to={'/usefulllinks'}>
+              <button className={styles.useful}>
+                Check Dutch Article (de / het)
+              </button>
+            </Link>
       <div className={styles.addWord}>
         <h3 style={{fontWeight: '400'}}>Добавьте новое слово</h3>
         <input
@@ -136,6 +140,9 @@ export default function Folder() {
           onChange={(e) => setTranslation(e.target.value)}
         />
         <button onClick={addWord}>Добавить слово</button>
+        <Link className={styles.playGameInFolder} to={`/play/${folderId}`}>
+        <button style={{marginLeft: '1rem'}}>Play Game 🎮</button>
+      </Link>
       </div>
 
       {words.length > 0 ? <h3>Слова в этой папке:</h3> : ''}
