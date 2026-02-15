@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import BackButton from '../components/BackButton';
 import {useError} from '../context/ErrorContext';
-
+const API = import.meta.env.VITE_API;
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -22,7 +22,7 @@ export default function ForgotPassword() {
     }
 
     try {
-      const res = await fetch('http://localhost:3001/auth/forgot', {
+      const res = await fetch(`${API}/auth/forgot`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({email, newPassword}),

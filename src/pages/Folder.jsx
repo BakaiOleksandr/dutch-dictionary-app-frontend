@@ -9,7 +9,6 @@ import {FiArrowUp} from 'react-icons/fi';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 
 const API = import.meta.env.VITE_API;
-
 export default function Folder() {
   const {folderId} = useParams();
   const token = localStorage.getItem('token');

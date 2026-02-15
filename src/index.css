@@ -76,6 +76,7 @@ input {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  font-size: larger;
 }
 form {
   display: flex;

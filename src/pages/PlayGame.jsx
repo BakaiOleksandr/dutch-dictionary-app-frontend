@@ -5,7 +5,6 @@ import {LoadingContext} from '../context/LoadingContext';
 import styles from './PlayGame.module.css';
 
 const API = import.meta.env.VITE_API;
-
 export default function PlayGame() {
   const {folderId} = useParams();
   const token = localStorage.getItem('token');

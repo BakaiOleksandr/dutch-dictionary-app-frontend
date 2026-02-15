@@ -72,7 +72,9 @@ export default function Dashboard() {
       <div className={styles.headerDash}>
         {user && <p className={styles.userNameDash}>{user.email}</p>}
         <Link to={'/usefulllinks'}>
-          <button className={styles.useful}>Полезное </button>
+          <button className={styles.useful}>
+            Check Dutch Article (de / het)
+          </button>
         </Link>
         <button className={styles.logOutBtn} onClick={logout}>
           Logout

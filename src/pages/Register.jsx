@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {validateEmailAndPassword} from '../utils/validation';
 import BackButton from '../components/BackButton';
 import {useError} from '../context/ErrorContext';
-
+const API = import.meta.env.VITE_API;
 export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,7 +18,7 @@ export default function Register() {
     }
 
     try {
-      const res = await fetch('http://localhost:3001/auth/register', {
+      const res = await fetch(`${API}/auth/register`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({email, password}),
