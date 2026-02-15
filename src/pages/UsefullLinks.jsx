@@ -66,6 +66,7 @@ export default function UsefullLinks() {
             placeholder="Enter Dutch word"
             value={word}
             name="checksubmit"
+            autoComplete="off"
             onChange={(e) => {
               const sanitized = e.target.value.replace(/[^a-zA-ZÀ-ÿ\-]/g, '');
               setWord(sanitized);
