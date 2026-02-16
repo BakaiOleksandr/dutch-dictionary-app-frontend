@@ -2,7 +2,6 @@ import {useContext, useState} from 'react';
 import {AuthContext} from '../context/AuthContext';
 import {validateEmailAndPassword} from '../utils/validation';
 import {Link} from 'react-router-dom';
-import BackButton from '../components/BackButton';
 import {useError} from '../context/ErrorContext';
 import {useNavigate} from 'react-router-dom';
 
@@ -25,8 +24,7 @@ export default function Login() {
     const res = await login(email, password);
 
     if (res.token) {
-      localStorage.setItem('token', res.token);
-      navigate('/app');
+      navigate('/app', {replace: true});
     } else {
       showError(res.message || 'Login failed');
     }
@@ -34,7 +32,9 @@ export default function Login() {
 
   return (
     <>
-      <BackButton />
+      <Link style={{display: 'flex', justifyContent: 'center'}} to={'/'}>
+        <button style={{backgroundColor: 'lightblue'}}>Home</button>
+      </Link>
       <div className="h1-container">
         <h2>Login</h2>
       </div>

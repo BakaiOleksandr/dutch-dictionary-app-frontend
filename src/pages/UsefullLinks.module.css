@@ -1,8 +1,21 @@
-.mainContainer{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 1rem;
 }
-.result{
-    font-size: 3rem;
+
+.result strong {
+  font-size: 2rem;
+  margin: 1rem;
+
+  word-break: break-word; /* переносит длинные слова */
+  overflow-wrap: anywhere; /* современный стандарт */
+  hyphens: auto; /* красивый перенос (если поддерживается) */
+
+  text-align: center;
+  display: block;
+  max-width: 100%;
 }

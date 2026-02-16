@@ -1,12 +1,14 @@
 import {useState} from 'react';
 import BackButton from '../components/BackButton';
 import {useError} from '../context/ErrorContext';
+import {useNavigate} from 'react-router-dom';
 const API = import.meta.env.VITE_API;
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [success, setSuccess] = useState('');
   const {showError} = useError();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,6 +41,9 @@ export default function ForgotPassword() {
       }
 
       setSuccess(data.message);
+      setEmail('');
+      setNewPassword('');
+      navigate('/login', {replace: true});
     } catch (err) {
       showError('Server error');
     }
@@ -67,7 +72,9 @@ export default function ForgotPassword() {
         />
         <button type="submit">Reset Password</button>
       </form>
-      {success && <p style={{color: 'green'}}>{success}</p>}
+      {success && (
+        <p style={{color: 'green', textAlign: 'center'}}>{success}</p>
+      )}
     </div>
   );
 }

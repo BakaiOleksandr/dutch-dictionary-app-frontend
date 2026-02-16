@@ -10,14 +10,20 @@ export function AuthProvider({children}) {
 
   const token = localStorage.getItem('token');
 
+  // обычный логин
   const login = async (email, password) => {
     const data = await loginRequest(email, password);
     if (data.token) {
-      localStorage.setItem('token', data.token);
-      await loadUser(data.token);
-      setIsAuth(true);
+      await loginWithToken(data.token);
     }
     return data;
+  };
+
+  // ⭐ НОВОЕ — логин по токену (нужен для register)
+  const loginWithToken = async (token) => {
+    localStorage.setItem('token', token);
+    await loadUser(token);
+    setIsAuth(true);
   };
 
   const loadUser = async (token) => {
@@ -26,6 +32,7 @@ export function AuthProvider({children}) {
       setUser(userData);
     } catch {
       logout();
+      throw new Error('Invalid token');
     }
   };
 
@@ -35,19 +42,22 @@ export function AuthProvider({children}) {
     setUser(null);
   };
 
+  // ⭐ исправленный автологин при refresh
   useEffect(() => {
-    if (token) {
-      loadUser(token).finally(() => {
-        setIsAuth(true);
-        setLoading(false);
-      });
-    } else {
+    if (!token) {
       setLoading(false);
+      return;
     }
+
+    loadUser(token)
+      .then(() => setIsAuth(true))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
-    <AuthContext.Provider value={{isAuth, user, login, logout, loading}}>
+    <AuthContext.Provider
+      value={{isAuth, user, login, loginWithToken, logout, loading}}
+    >
       {children}
     </AuthContext.Provider>
   );

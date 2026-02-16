@@ -1,12 +1,18 @@
-import {useState} from 'react';
-import {validateEmailAndPassword} from '../utils/validation';
-import BackButton from '../components/BackButton';
-import {useError} from '../context/ErrorContext';
+import { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { validateEmailAndPassword } from '../utils/validation';
+import { useError } from '../context/ErrorContext';
+import { AuthContext } from '../context/AuthContext';
+
 const API = import.meta.env.VITE_API;
+
 export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const {showError} = useError();
+  const { showError } = useError();
+  const { loginWithToken } = useContext(AuthContext);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,8 +37,9 @@ export default function Register() {
         return;
       }
 
-      localStorage.setItem('token', data.token);
-      navigate('/app');
+      await loginWithToken(data.token); // ⭐ ключевая строка
+      navigate('/app',{ replace: true });
+
     } catch {
       showError('Server error');
     }
@@ -40,10 +47,14 @@ export default function Register() {
 
   return (
     <>
-      <BackButton />
+      <Link style={{display: 'flex', justifyContent: 'center'}} to={'/'}>
+        <button style={{backgroundColor: 'lightblue'}}>Home</button>
+      </Link>
+
       <div className="h1-container">
         <h2>Register</h2>
       </div>
+
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -53,6 +64,7 @@ export default function Register() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+
         <input
           type="password"
           autoComplete="new-password"

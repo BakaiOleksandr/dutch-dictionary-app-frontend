@@ -4,6 +4,7 @@
   justify-content: space-between;
   background-color: antiquewhite;
   padding: 1rem;
+  gap: 1rem;
 }
 .userNameDash {
   font-weight: 300;
@@ -78,7 +79,7 @@
     margin: 0;
   }
   .headerDash {
-    font-size: smaller;
+    font-size: 0.7rem;
     padding: 0.5rem;
   }
 }
